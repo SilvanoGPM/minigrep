@@ -1,5 +1,7 @@
 use std::error::Error;
-use std::{fs, env};
+use std::{env, fs};
+
+use colored::*;
 
 pub struct Config {
     pub query: String,
@@ -17,7 +19,11 @@ impl Config {
         let file_path = args[2].clone();
         let ignore_case = env::var("IGNORE_CASE").is_ok();
 
-        Ok(Self { query, file_path, ignore_case })
+        Ok(Self {
+            query,
+            file_path,
+            ignore_case,
+        })
     }
 }
 
@@ -31,7 +37,9 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     };
 
     for line in result {
-        println!("{line}");
+        let colored_line = colorize_line(line, &config.query);
+
+        println!("{colored_line}");
     }
 
     Ok(())
@@ -60,6 +68,22 @@ pub fn search_case_insensitive<'a>(query: &str, content: &'a str) -> Vec<&'a str
     }
 
     results
+}
+
+fn colorize_line(line: &str, query: &str) -> String {
+    line.split_whitespace()
+        .map(|word| {
+            if word.contains(query) {
+                let colored_query = query.green().bold().to_string();
+                let colored_rest = &word[query.len()..].red().bold().to_string();
+
+                return colored_query + colored_rest;
+            }
+
+            word.red().bold().to_string()
+        })
+        .collect::<Vec<String>>()
+        .join(" ")
 }
 
 #[cfg(test)]
