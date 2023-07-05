@@ -72,5 +72,5 @@ Remove-Item Env:IGNORE_CASE
 
 ## :heart: Agradecimentos
 
-- (The Rust Programming Language)[https://doc.rust-lang.org/book/ch12-00-an-io-project.html]
+- [The Rust Programming Language](https://doc.rust-lang.org/book/ch12-00-an-io-project.html)
 
