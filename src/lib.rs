@@ -11,6 +11,8 @@ pub struct Config {
 
 impl Config {
     pub fn build(mut args: impl Iterator<Item = String>) -> Result<Self, &'static str> {
+        const IGNORE_CASE_FLAG: &str = "--i";
+
         args.next();
 
         let query = match args.next() {
@@ -19,11 +21,19 @@ impl Config {
         };
 
         let file_path = match args.next() {
-            Some(query) => query,
+            Some(path) => path,
             None => return Err("Didn't get a file path"),
         };
 
-        let ignore_case = env::var("IGNORE_CASE").is_ok();
+        let ignore_case_flag = match args.next()  {
+            Some(flag) if flag.to_lowercase() == IGNORE_CASE_FLAG => true,
+            Some(_) => return Err("Invalid flag does not exist"),
+            None => false,
+        };
+
+        let ignore_case_env = env::var("IGNORE_CASE").is_ok();
+
+        let ignore_case = ignore_case_flag || ignore_case_env;
 
         Ok(Self {
             query,
