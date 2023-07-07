@@ -53,6 +53,12 @@ minigrep nobody example.txt
 
 Incluir maiúsculas e minúsculas:
 
+```
+minigrep nobody example.txt --i
+```
+
+Caso em todas as pesquisas deseje incluir maiúsculas e minúsculas, você pode utilizar uma variável de ambiente.
+
 Linux:
 ```
 IGNORE_CASE=1 minigrep nobody example.txt
