@@ -53,7 +53,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     };
 
     for line in result {
-        let colored_line = colorize_line(line, &config.query);
+        let colored_line = colorize_line(line, &config.query, config.ignore_case);
 
         println!("{colored_line}");
     }
@@ -77,14 +77,17 @@ pub fn search_case_insensitive<'a>(query: &str, content: &'a str) -> Vec<&'a str
         .collect()
 }
 
-fn colorize_line(line: &str, query: &str) -> String {
+fn colorize_line(line: &str, query: &str, insensitive: bool) -> String {
     line.split_whitespace()
         .map(|word| {
-            if word.contains(query) {
-                let colored_query = query.green().bold().to_string();
-                let colored_rest = &word[query.len()..].red().bold().to_string();
+            let colorize = if insensitive { word.to_lowercase().contains(&query.to_lowercase()) } else { word.contains(query) };
+            
+            if colorize {
+                let query_size = query.len();
+                let colored_query = &word[..query_size].green().bold().to_string();
+                let colored_rest = &word[query_size..].red().bold().to_string();
 
-                return colored_query + colored_rest;
+                return format!("{colored_query}{colored_rest}");
             }
 
             word.red().bold().to_string()
