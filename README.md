@@ -5,7 +5,7 @@
 ## :rocket: Funcionalidades
 
 - Pesquisa eficiente de um padrão de busca em arquivos de texto.
-- Suporta variáveis de ambiente para ignorar maiúsculas e minúsculas.
+- Suporta flags e variáveis de ambiente para ignorar maiúsculas e minúsculas.
 - Exibe os resultados da pesquisa destacando as correspondências encontradas.
 
 ## ⚙️ Requisitos
